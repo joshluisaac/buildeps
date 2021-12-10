@@ -1,16 +1,15 @@
 package au.com.anz;
 
-import static java.util.stream.Collectors.toList;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import java.io.*;
-import java.math.*;
-import java.security.*;
-import java.text.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
-import java.util.regex.*;
-import java.util.stream.*;
+// import java.util.stream.*;
 
 class DepTarget {
   Integer rank;
@@ -45,7 +44,7 @@ class Result {
                   return new DepTarget(entryIdx, k.get(1), k.get(0));
                 })
             .sorted(Comparator.comparing((DepTarget depTarget) -> depTarget.rank))
-            .collect(toList());
+            .collect(Collectors.toList());
 
     Deque<String> deque = new ArrayDeque<>(files);
     List<String> results = new ArrayList<>();
@@ -53,7 +52,10 @@ class Result {
     while (!deque.isEmpty()) {
       String head = deque.pollFirst();
       List<DepTarget> dependencies =
-          depTargets.stream().filter(depTarget -> Objects.equals(depTarget.key, head)).collect(toList());
+          depTargets
+              .stream()
+              .filter(depTarget -> Objects.equals(depTarget.key, head))
+              .collect(Collectors.toList());
 
       if (!dependencies.isEmpty()) {
         dependencies.forEach(
@@ -81,11 +83,10 @@ public class Solution {
             List.of("prog2", "c.o"),
             List.of("c.o", "c.c"));
 
-    List<String> files = List.of("a.o","b.c");
+    List<String> files = List.of("a.o", "b.c");
 
     List<String> result = Result.findDirty(data, files);
 
     System.out.println(result);
-
   }
 }
